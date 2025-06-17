@@ -3,24 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>국가지점번호 및 안내 정보</title>
+  <title>국가지점번호 안내</title>
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #fff; }
     header { background: #fff; color: black; padding: 1em 2em; }
-    .about { padding: 2em; background: #fff; }
-    .video-section { padding: 2em; background: #fff; }
+    .selector-section { padding: 2em; background: #fff; }
+    .info-section { padding: 2em; background: #fff; line-height: 1.8; display: none; }
+    .video-section { padding: 2em; background: #fff; display: none; }
     .video-section iframe { width: 100%; height: 500px; border: none; }
-    .info-section { padding: 2em; background: #fff; line-height: 1.8; }
     footer { background: #fff; color: black; text-align: center; padding: 1em; }
   </style>
 </head>
 <body>
-  <section class="info-section">
-    <h2>국가지점번호 및 안내 정보</h2>
-    <p>응급상황 발생등 119긴급구조 요청시 국가지점번호를 활용하시면 편리합니다</p>
+  <section class="selector-section">
+    <h2>국가지점번호 선택</h2>
+    <select id="pointSelector" onchange="showInfo(this.value)">
+      <option value="">-- 번호를 선택하세요 --</option>
+      <option value="다바05243645">다바05243645</option>
+      <option value="다바05253636">다바05253636</option>
+      <option value="다바05303629">다바05303629</option>
+      <option value="다바05283634">다바05283634</option>
+      <option value="다바05243652">다바05243652</option>
+      <option value="다바05073645">다바05073645</option>
+      <option value="다바05003642">다바05003642</option>
+      <option value="다바04823644">다바04823644</option>
+      <option value="다바04783636">다바04783636</option>
+      <option value="다바04933628">다바04933628</option>
+      <option value="다바04973623">다바04973623</option>
+      <option value="다바05113606">다바05113606</option>
+      <option value="다바05013591">다바05013591</option>
+      <option value="다바05143582">다바05143582</option>
+      <option value="다바05293592">다바05293592</option>
+      <option value="다바05423593">다바05423593</option>
+      <option value="다바07364189">다바07364189</option>
+      <option value="다바07644177">다바07644177</option>
+      <option value="다바07664157">다바07664157</option>
+      <option value="다바07684136">다바07684136</option>
+      <option value="다바07694116">다바07694116</option>
+      <option value="다바07754102">다바07754102</option>
+      <option value="다바07874083">다바07874083</option>
+      <option value="다바07964072">다바07964072</option>
+    </select>
+  </section>
 
-    <p><strong>국가지점번호:</strong> 다바05243645</p>
-    <p><strong>토지소재지:</strong> 충청남도 홍성군 서부면 죽도리 9999-9990</p>
+  <section class="info-section" id="info">
+    <h2>국가지점번호 및 안내 정보</h2>
+    <p id="guide-text">응급상황 발생 등 119 긴급구조 요청 시 국가지점번호를 활용하시면 편리합니다.</p>
+    <p><strong>국가지점번호:</strong> <span id="pointCode"></span></p>
+    <p><strong>토지소재지:</strong> <span id="pointAddress"></span></p>
     <p><strong>관리부서:</strong> 홍성군청 민원지적과 (041-630-1473)</p>
     <p><strong>주소:</strong> 충청남도 홍성군 홍성읍 아문길 27</p>
   </section>
@@ -31,7 +61,59 @@
   </section>
 
   <footer>
-    &copy; 2025 My Portfolio. All rights reserved.
+    &copy; 2025 홍성군청 민원지적과. All rights reserved.
   </footer>
+
+  <script>
+    const pointData = {
+      "다바05243645": "충청남도 홍성군 서부면 죽도리 9999-9990",
+      "다바05253636": "충청남도 홍성군 서부면 죽도리 33-1",
+      "다바05303629": "충청남도 홍성군 서부면 죽도리 33-1",
+      "다바05283634": "충청남도 홍성군 서부면 죽도리 33-1",
+      "다바05243652": "충청남도 홍성군 서부면 죽도리 9999-9990",
+      "다바05073645": "충청남도 홍성군 서부면 죽도리 9999-9990",
+      "다바05003642": "충청남도 홍성군 서부면 죽도리 50",
+      "다바04823644": "충청남도 홍성군 서부면 죽도리 39-1",
+      "다바04783636": "충청남도 홍성군 서부면 죽도리 39-2",
+      "다바04933628": "충청남도 홍성군 서부면 죽도리 39-1",
+      "다바04973623": "충청남도 홍성군 서부면 죽도리 39-1",
+      "다바05113606": "충청남도 홍성군 서부면 죽도리 9999-9990",
+      "다바05013591": "충청남도 홍성군 서부면 죽도리 1-1",
+      "다바05143582": "충청남도 홍성군 서부면 죽도리 1-1",
+      "다바05293592": "충청남도 홍성군 서부면 죽도리 9999-9990",
+      "다바05423593": "충청남도 홍성군 서부면 죽도리 9999-9990",
+      "다바07364189": "충청남도 홍성군 서부면 상황리 9999-9990",
+      "다바07644177": "충청남도 홍성군 서부면 상황리 689-2",
+      "다바07664157": "충청남도 홍성군 서부면 거차리 472-5",
+      "다바07684136": "충청남도 홍성군 서부면 거차리 472-5",
+      "다바07694116": "충청남도 홍성군 서부면 거차리 472-15",
+      "다바07754102": "충청남도 홍성군 서부면 거차리 472-5",
+      "다바07874083": "충청남도 홍성군 서부면 거차리 405-38",
+      "다바07964072": "충청남도 홍성군 서부면 거차리 405-38"
+    };
+
+    function showInfo(value) {
+      const infoSection = document.getElementById('info');
+      const videoSection = document.getElementById('video');
+      if (pointData[value]) {
+        document.getElementById('pointCode').innerText = value;
+        document.getElementById('pointAddress').innerText = pointData[value];
+        infoSection.style.display = 'block';
+        videoSection.style.display = 'block';
+      } else {
+        infoSection.style.display = 'none';
+        videoSection.style.display = 'none';
+      }
+    }
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const point = params.get('point');
+      if (point && pointData[point]) {
+        document.getElementById('pointSelector').value = point;
+        showInfo(point);
+      }
+    };
+  </script>
 </body>
 </html>
