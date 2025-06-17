@@ -81,7 +81,6 @@
       const params = new URLSearchParams(window.location.search);
       const point = params.get('point');
       if (point && pointData[point]) {
-        document.getElementById('pointSelector').value = point;
         showInfo(point);
       }
     };
