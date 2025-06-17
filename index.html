@@ -7,15 +7,18 @@
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #fff; }
     header { background: #fff; color: black; padding: 1em 2em; }
-    .selector-section { padding: 2em; background: #fff; }
     .info-section { padding: 2em; background: #fff; line-height: 1.8; display: none; }
     .video-section { padding: 2em; background: #fff; display: none; }
     .video-section iframe { width: 100%; height: 500px; border: none; }
+    .error-message { padding: 2em; color: red; display: none; }
     footer { background: #fff; color: black; text-align: center; padding: 1em; }
   </style>
 </head>
 <body>
-  
+  <section class="error-message" id="error">
+    <h2>국가지점번호가 확인되지 않았습니다.</h2>
+    <p>유효한 링크를 통해 접속해주세요.</p>
+  </section>
 
   <section class="info-section" id="info">
     <h2>국가지점번호 및 안내 정보</h2>
@@ -32,7 +35,7 @@
   </section>
 
   <footer>
-    &copy; 2025 홍성군청 민원지적과. All rights reserved.
+    &copy; 2025 홍성군청 민원지적과. 
   </footer>
 
   <script>
@@ -66,24 +69,30 @@
     function showInfo(value) {
       const infoSection = document.getElementById('info');
       const videoSection = document.getElementById('video');
+      const errorSection = document.getElementById('error');
+
       if (pointData[value]) {
         document.getElementById('pointCode').innerText = value;
         document.getElementById('pointAddress').innerText = pointData[value];
         infoSection.style.display = 'block';
         videoSection.style.display = 'block';
+        errorSection.style.display = 'none';
       } else {
         infoSection.style.display = 'none';
         videoSection.style.display = 'none';
+        errorSection.style.display = 'block';
       }
     }
 
-    window.onload = function () {
-      const params = new URLSearchParams(window.location.search);
-      const point = params.get('point');
-      if (point && pointData[point]) {
-        showInfo(point);
-      }
-    };
+    document.addEventListener("DOMContentLoaded", function () {
+  const params = new URLSearchParams(window.location.search);
+  const point = decodeURIComponent(params.get("point"));
+  if (point) {
+    showInfo(point);
+  } else {
+    document.getElementById("error").style.display = "block";
+  }
+});
   </script>
 </body>
 </html>
